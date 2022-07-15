@@ -1,0 +1,1147 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Truskill Games",
+        "description": "API for the Truskill Games",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register a new user.",
+                "operationId": "register",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "name",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "The new User email (unique)",
+                                        "type": "string",
+                                        "example": "example@test.com"
+                                    },
+                                    "name": {
+                                        "description": "The new User name (unique, max:255)",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "password": {
+                                        "description": "The new User password (min:8)",
+                                        "type": "string",
+                                        "example": "secret123"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "The password confirmation (same as 'password')",
+                                        "type": "string",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/UserWithToken"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to create a new user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR_CREATE_FAILED"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Provided data is not valid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR422"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login the user.",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "The User email",
+                                        "type": "string",
+                                        "example": "example@test.com"
+                                    },
+                                    "password": {
+                                        "description": "The User password",
+                                        "type": "string",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/UserWithToken"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR_CREATE_FAILED"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "the user not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR_NOT_FOUND"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Provided data is not valid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR422"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout the user.",
+                "operationId": "logout",
+                "responses": {
+                    "201": {
+                        "description": "User logged out."
+                    },
+                    "400": {
+                        "description": "Failed to create a new user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR_CREATE_FAILED"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or not provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR401"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/twitch/clips": {
+            "get": {
+                "tags": [
+                    "TwitchClips"
+                ],
+                "summary": "Get the Twitch Clips",
+                "operationId": "getTwitchClips",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Authorization"
+                    },
+                    {
+                        "$ref": "#/components/parameters/repository-pagination-required"
+                    },
+                    {
+                        "$ref": "#/components/parameters/repository-sort"
+                    },
+                    {
+                        "$ref": "#/components/parameters/repository-filters"
+                    },
+                    {
+                        "$ref": "#/components/parameters/repository-search"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Clips list returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TwitchClip"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or not provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR401"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/twitch/clips/{gameId}": {
+            "get": {
+                "tags": [
+                    "TwitchClips"
+                ],
+                "summary": "Get the twitch game details",
+                "operationId": "getTwitchClipDetails",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Authorization"
+                    },
+                    {
+                        "name": "gameId",
+                        "in": "path",
+                        "description": "The game ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Clip details returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/TwitchClip"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or not provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR401"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Clip not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR_NOT_FOUND"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/twitch/games": {
+            "get": {
+                "tags": [
+                    "TwitchGames"
+                ],
+                "summary": "Get the Twitch Games",
+                "operationId": "getTwitchGames",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Authorization"
+                    },
+                    {
+                        "$ref": "#/components/parameters/repository-pagination-required"
+                    },
+                    {
+                        "$ref": "#/components/parameters/repository-sort"
+                    },
+                    {
+                        "$ref": "#/components/parameters/repository-filters"
+                    },
+                    {
+                        "$ref": "#/components/parameters/repository-search"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Games list returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TwitchGame"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or not provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR401"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/twitch/games/{gameId}": {
+            "get": {
+                "tags": [
+                    "TwitchGames"
+                ],
+                "summary": "Get the twitch game details",
+                "operationId": "getTwitchGameDetails",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Authorization"
+                    },
+                    {
+                        "name": "gameId",
+                        "in": "path",
+                        "description": "The game ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Game details returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/TwitchGame"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token expired or not provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR401"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Game not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR_NOT_FOUND"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ERR500"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "links": {
+                "properties": {
+                    "first": {
+                        "type": "string",
+                        "example": "http:\\/\\/api.domain\\/version\\/resource?page=1"
+                    },
+                    "last": {
+                        "type": "string",
+                        "example": "http:\\/\\/api.domain\\/version\\/resource?page=8"
+                    },
+                    "prev": {
+                        "type": "string",
+                        "example": "http:\\/\\/api.domain\\/version\\/resource?page=3"
+                    },
+                    "next": {
+                        "type": "string",
+                        "example": "http:\\/\\/api.domain\\/version\\/resource?page=5"
+                    }
+                },
+                "type": "object"
+            },
+            "meta": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": 4
+                    },
+                    "from": {
+                        "type": "integer",
+                        "example": 46
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": 8
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "http:\\/\\/api.domain\\/version\\/resource"
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "to": {
+                        "type": "integer",
+                        "example": 60
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 15
+                    }
+                },
+                "type": "object"
+            },
+            "repository-search": {
+                "description": "Should confirm the following format \"text,[field1,field2,...]\", where text is not empty and the field names are valid",
+                "type": "string",
+                "example": "John,[name,email]"
+            },
+            "repository-sort": {
+                "description": "Should confirm the following format \"field,dir\", where field name is valid and the dir is either \"asc\" or \"desc\"",
+                "type": "string",
+                "example": "id,asc"
+            },
+            "repository-pagination": {
+                "description": "Should confirm the following format \"page,perPage\", where both page and perPage are positive integers",
+                "type": "string",
+                "example": "1,15"
+            },
+            "repository-filters": {
+                "description": "A valid JSON string of filters. Default modes: =, !=, like, !like, included, !included, range, !range, contains, !contains, >, >=, <, <=, null, !null",
+                "type": "string",
+                "example": "[{\"field\":\"name\",\"mode\":\"like\",\"value\":\"test\"},{\"field\":\"id\",\"mode\":\"range\",\"value\":[1,5]}]"
+            },
+            "ERR401": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Unauthenticated."
+                    }
+                },
+                "type": "object"
+            },
+            "ERR403": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "User does not have the right permissions."
+                    }
+                },
+                "type": "object"
+            },
+            "ERR422": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "The given data was invalid."
+                    },
+                    "errors": {
+                        "properties": {
+                            "field_name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "example": "The field_name field is required."
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR500": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Server Error"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_FETCH_FAILED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "610"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Failed to fetch data."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_CREATE_FAILED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "600"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Failed to create a resource."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_UPDATE_FAILED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "601"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Failed to update the resource."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_DELETE_FAILED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "602"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Failed to delete the resource."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_RESTORE_FAILED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "603"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Failed to restore the resource."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_NOT_FOUND": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "604"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Resource not found."
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_UPLOAD_FAILED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "605"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Failed to upload the file."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_DOWNLOAD_FAILED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "606"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Failed to download the file."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_EXPIRED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "607"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Resource is expired."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_ACTION_FAILED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "608"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Failed to perform the action."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ERR_ACCESS_DENIED": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "example": "609"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Resource is inaccessible."
+                    },
+                    "details": {
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "example": "More detailed error message."
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "TwitchClip": {
+                "properties": {
+                    "id": {
+                        "description": "The clip ID",
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "twitchId": {
+                        "description": "The clip twitch ID",
+                        "type": "string",
+                        "example": "CrypticSpineyToothTwitchRaid-HdLPQX7l2w-oaUOx"
+                    },
+                    "game": {
+                        "$ref": "#/components/schemas/TwitchGame"
+                    },
+                    "videoId": {
+                        "description": "The video id",
+                        "type": "string",
+                        "example": "1446072581"
+                    },
+                    "url": {
+                        "description": "The url",
+                        "type": "string",
+                        "example": "https://clips.twitch.tv/CrypticSpineyToothTwitchRaid-HdLPQX7l2w-oaUOx"
+                    },
+                    "embed": {
+                        "description": "The embed url",
+                        "type": "string",
+                        "example": "https://clips.twitch.tv/embed?clip=CrypticSpineyToothTwitchRaid-HdLPQX7l2w-oaUOx"
+                    },
+                    "thumbnail": {
+                        "description": "The thumbnail url",
+                        "type": "string",
+                        "example": "https://clips-media-assets2.twitch.tv/AT-cm%7CmELjqR3Sz0F-5dsPqGlDsQ-preview-480x272.jpg"
+                    },
+                    "broadcasterId": {
+                        "description": "The broadcaster id",
+                        "type": "string",
+                        "example": "102381201"
+                    },
+                    "broadcasterName": {
+                        "description": "The broadcaster name",
+                        "type": "string",
+                        "example": "따효니"
+                    },
+                    "creatorId": {
+                        "description": "The creator id",
+                        "type": "string",
+                        "example": "225454689"
+                    },
+                    "creatorName": {
+                        "description": "The creator name",
+                        "type": "string",
+                        "example": "차부내"
+                    },
+                    "language": {
+                        "description": "The language",
+                        "type": "string",
+                        "example": "ko"
+                    },
+                    "title": {
+                        "description": "The title",
+                        "type": "string",
+                        "example": "ㅋㅋㅋㅋㅋㅋㅋ"
+                    },
+                    "views": {
+                        "description": "The views count",
+                        "type": "integer",
+                        "example": 6209
+                    },
+                    "duration": {
+                        "description": "The duration",
+                        "type": "double",
+                        "example": 16.3
+                    },
+                    "createdAt": {
+                        "description": "Creation datetime",
+                        "type": "string",
+                        "example": "2022-04-19 12:10:55"
+                    },
+                    "importedAt": {
+                        "description": "Importation datetime",
+                        "type": "string",
+                        "example": "2022-04-20 13:15:31"
+                    },
+                    "updatedAt": {
+                        "description": "Last modification datetime",
+                        "type": "string",
+                        "example": "2022-04-24 18:00:00"
+                    }
+                },
+                "type": "object"
+            },
+            "TwitchGame": {
+                "properties": {
+                    "id": {
+                        "description": "The game ID",
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "twitchId": {
+                        "description": "The games' twitch ID",
+                        "type": "string",
+                        "example": "1000189302"
+                    },
+                    "name": {
+                        "description": "The games' name",
+                        "type": "string",
+                        "example": "That Role Playing"
+                    },
+                    "image": {
+                        "description": "The games' image url",
+                        "type": "string",
+                        "example": "https://static-cdn.jtvnw.net/ttv-boxart/1000189302-190x190.jpg"
+                    },
+                    "createdAt": {
+                        "description": "Creation datetime",
+                        "type": "string",
+                        "example": "2022-04-20 13:15:31"
+                    },
+                    "updatedAt": {
+                        "description": "Last modification datetime",
+                        "type": "string",
+                        "example": "2022-04-24 18:00:00"
+                    }
+                },
+                "type": "object"
+            },
+            "UserWithToken": {
+                "properties": {
+                    "id": {
+                        "description": "User ID",
+                        "type": "integer",
+                        "example": 9876
+                    },
+                    "name": {
+                        "description": "User name",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "description": "User email",
+                        "type": "string",
+                        "example": "example@test.com"
+                    },
+                    "token": {
+                        "description": "User api token",
+                        "type": "string",
+                        "example": ""
+                    },
+                    "createdAt": {
+                        "description": "User creation datetime",
+                        "type": "string",
+                        "example": "2022-04-20 13:15:31"
+                    },
+                    "updatedAt": {
+                        "description": "User last modification datetime",
+                        "type": "string",
+                        "example": "2022-04-24 18:00:00"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "parameters": {
+            "Authorization": {
+                "name": "Authorization",
+                "in": "header",
+                "description": "The access token (e.g Bearer eyJ0eXAiOiJKV1...)",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "page": {
+                "name": "page",
+                "in": "query",
+                "description": "The page number of the list",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "perPage": {
+                "name": "perPage",
+                "in": "query",
+                "description": "The items number per page",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "sort": {
+                "name": "sort",
+                "in": "query",
+                "description": "Set for items sorting per field (e.g. {\"field\":\"id\",\"dir\":\"desc\"})",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "filters": {
+                "name": "filters",
+                "in": "query",
+                "description": "Set for items filtering (e.g. [{\"field\":\"name\",\"mode\":\"like\",\"value\":\"test\"},{\"field\":\"id\",\"mode\":\"range\",\"value\":[2,5]}])",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "search": {
+                "name": "search",
+                "in": "query",
+                "description": "Set a global search for the items (e.g. {\"fields\":[\"firstname\", \"lastname\"],\"value\":\"john\"})",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "trashed": {
+                "name": "trashed",
+                "in": "query",
+                "description": "Set to 1/true to return only soft deleted(trashed) items",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "repository-search": {
+                "name": "search",
+                "in": "query",
+                "description": "Data search parameters",
+                "required": false,
+                "schema": {
+                    "$ref": "#/components/schemas/repository-search"
+                }
+            },
+            "repository-filters": {
+                "name": "filters",
+                "in": "query",
+                "description": "Data filter parameters",
+                "required": false,
+                "schema": {
+                    "$ref": "#/components/schemas/repository-filters"
+                }
+            },
+            "repository-sort": {
+                "name": "sort",
+                "in": "query",
+                "description": "Data sorting parameters",
+                "required": false,
+                "schema": {
+                    "$ref": "#/components/schemas/repository-sort"
+                }
+            },
+            "repository-pagination": {
+                "name": "pagination",
+                "in": "query",
+                "description": "Data pagination parameters",
+                "required": false,
+                "schema": {
+                    "$ref": "#/components/schemas/repository-pagination"
+                }
+            },
+            "repository-pagination-required": {
+                "name": "pagination",
+                "in": "query",
+                "description": "Data pagination parameters",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/repository-pagination"
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

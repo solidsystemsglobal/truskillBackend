@@ -1,0 +1,15 @@
+
+  GET|HEAD   / ....................................................................................................... generated::l0lk4sAiZhV1VcxT
+  POST       _ignition/execute-solution ............................ ignition.executeSolution › Spatie\LaravelIgnition › ExecuteSolutionController
+  GET|HEAD   _ignition/health-check ........................................ ignition.healthCheck › Spatie\LaravelIgnition › HealthCheckController
+  POST       _ignition/update-config ..................................... ignition.updateConfig › Spatie\LaravelIgnition › UpdateConfigController
+  GET|HEAD   api/documentation ................................................... l5-swagger.default.api › L5Swagger\Http › SwaggerController@api
+  POST       api/login ................................................................. generated::1aoEkgpE3D8zzHOJ › Api\V1\AuthController@login
+  POST       api/logout ............................................................... generated::2XxFDJwpEIpQKWsL › Api\V1\AuthController@logout
+  GET|HEAD   api/oauth2-callback .......................... l5-swagger.default.oauth2_callback › L5Swagger\Http › SwaggerController@oauth2Callback
+  POST       api/register ........................................................... generated::2idhcXz8Bjc4wfeZ › Api\V1\AuthController@register
+  GET|HEAD   api/test ................................................................................................ generated::hujgfL7j6W8gIO40
+  GET|HEAD   docs/asset/{asset} ......................................... l5-swagger.default.asset › L5Swagger\Http › SwaggerAssetController@index
+  GET|HEAD   docs/{jsonFile?} .................................................. l5-swagger.default.docs › L5Swagger\Http › SwaggerController@docs
+  GET|HEAD   sanctum/csrf-cookie ....................................... generated::pGv6q4ENpMRuDpeA › Laravel\Sanctum › CsrfCookieController@show
+
